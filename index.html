@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Click the Circle! — KINETIX</title>
+
+  <!-- Custom SVG Web Favicon (Logo di Tab Browser) -->
+  <link
+    rel="icon"
+    type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%2338bdf8'/%3E%3Cstop offset='100%25' stop-color='%236366f1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='18' fill='%23090d1f'/%3E%3Ccircle cx='32' cy='32' r='20' fill='none' stroke='url(%23g)' stroke-width='4.5'/%3E%3Cpath d='M25 22v20M39 22L28 32l11 10' fill='none' stroke='%23ffffff' stroke-width='4.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"
+  />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Styles & Script -->
+  <link rel="stylesheet" href="styles.css" />
+  <script src="script.js" defer></script>
+</head>
+<body data-theme="galaxy">
+
+  <!-- Opening Splash Screen (Muncul pas web pertama dibuka) -->
+  <div id="splashScreen" class="splash-screen" aria-hidden="true">
+    <div class="splash-content">
+      <div class="splash-logo">
+        <svg viewBox="0 0 64 64" fill="none">
+          <defs>
+            <linearGradient id="splashGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#38bdf8" />
+              <stop offset="100%" stop-color="#818cf8" />
+            </linearGradient>
+          </defs>
+          <rect x="4" y="4" width="56" height="56" rx="18" fill="url(#splashGrad)" fill-opacity="0.14" stroke="url(#splashGrad)" stroke-width="2.5" />
+          <circle cx="32" cy="32" r="18" stroke="url(#splashGrad)" stroke-width="2.5" stroke-dasharray="6 4" />
+          <path d="M26 23v18M38 23L29 32l9 9" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </div>
+      <span class="splash-web-name">KINETIX</span>
+      <span class="splash-game-name">Click the Circle!</span>
+      <div class="splash-bar"><span class="splash-bar-fill"></span></div>
+    </div>
+  </div>
+
+  <!-- Ambient Theme FX Layer (Galaxy / Neon / Pastel) -->
+  <div id="theme-fx-layer" class="theme-fx-layer" aria-hidden="true"></div>
+
+  <div class="container">
+    <!-- Top Web Brand Bar -->
+    <nav class="web-topbar" aria-label="Website Brand">
+      <a href="#" class="web-brand">
+        <span class="web-logo" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none">
+            <rect x="2" y="2" width="28" height="28" rx="9" stroke="currentColor" stroke-width="2.2" />
+            <path d="M12.5 10.5v11M19.5 10.5L14 16l5.5 5.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </span>
+        <span class="web-brand-text">
+          <span class="web-name">KINETIX</span>
+          <span class="web-tag">ARCADE</span>
+        </span>
+      </a>
+
+      <!-- Sound & Theme Controls -->
+      <div class="top-actions">
+        <button type="button" id="soundToggle" class="sound-btn" aria-label="Toggle Sound" aria-pressed="true" title="Sound On">
+          <svg class="sound-icon sound-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+          </svg>
+          <svg class="sound-icon sound-off hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+            <line x1="23" y1="9" x2="17" y2="15" />
+            <line x1="17" y1="9" x2="23" y2="15" />
+          </svg>
+          <span id="soundLabel" class="sound-label">SFX</span>
+        </button>
+
+        <div class="theme-selector" id="themeSelector">
+          <button type="button" id="themeButton" class="theme-btn" aria-haspopup="listbox" aria-expanded="false">
+            <span id="themeIcon">🌌</span>
+            <span id="themeName">Galaxy</span>
+            <span class="chevron">▾</span>
+          </button>
+          <div id="themeDropdown" class="theme-dropdown hidden" role="listbox">
+            <button type="button" class="theme-option" data-theme="light"><span>☀️</span> Light</button>
+            <button type="button" class="theme-option" data-theme="dark"><span>🌙</span> Dark</button>
+            <button type="button" class="theme-option" data-theme="neon"><span>⚡</span> Neon</button>
+            <button type="button" class="theme-option" data-theme="pastel"><span>🧁</span> Pastel</button>
+            <button type="button" class="theme-option" data-theme="galaxy"><span>🌌</span> Galaxy</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Game Title Header -->
+    <header class="game-header">
+      <div class="brand">
+        <button type="button" id="logoBadge" class="logo-badge" aria-label="Click the Circle Emblem" title="Click the Circle!">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <circle cx="12" cy="12" r="9" />
+            <circle cx="12" cy="12" r="5" />
+            <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+          </svg>
+        </button>
+        <div>
+          <div class="title-row">
+            <h1>Click the Circle!</h1>
+            <span id="specialModeBadge" class="special-mode-badge hidden">🧁 SUGAR RUSH!</span>
+          </div>
+          <p class="subtitle">Precision reflex challenge · Stack combos &amp; beat your best time</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- HUD, Duration & Custom Difficulty Bar -->
+    <section class="hud-bar" aria-label="Game Stats and Settings">
+      <div class="stats-group">
+        <div class="stat-pill">
+          <span class="stat-label">SCORE</span>
+          <span class="stat-value" id="score">0</span>
+        </div>
+        <div class="stat-pill combo-pill" id="comboPill">
+          <span class="stat-label">COMBO</span>
+          <span class="stat-value" id="combo">1x</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-label">TIME</span>
+          <span class="stat-value" id="timer">30s</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-label">BEST</span>
+          <span class="stat-value" id="highScore">0</span>
+        </div>
+      </div>
+
+      <div class="controls-group">
+        <!-- Time Duration Selector (30s / 60s / 90s) -->
+        <div class="control-block">
+          <span class="control-caption">Time</span>
+          <div id="durationGroup" class="segmented-control" role="group" aria-label="Game Duration">
+            <button type="button" class="seg-btn active" data-duration="30">30s</button>
+            <button type="button" class="seg-btn" data-duration="60">60s</button>
+            <button type="button" class="seg-btn" data-duration="90">90s</button>
+          </div>
+        </div>
+
+        <!-- Custom Difficulty Dropdown -->
+        <div class="control-block">
+          <span class="control-caption">Mode</span>
+          <div class="custom-select" id="difficultySelector">
+            <button type="button" id="difficultyButton" class="custom-select-btn" aria-haspopup="listbox" aria-expanded="false">
+              <span class="diff-dot medium" id="currentDiffDot"></span>
+              <span id="currentDiffLabel">Medium</span>
+              <svg class="select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+
+            <div id="difficultyDropdown" class="custom-select-menu hidden" role="listbox">
+              <button type="button" class="diff-option" data-value="easy">
+                <span class="diff-dot easy"></span>
+                <div class="diff-option-text">
+                  <span class="diff-title">Easy</span>
+                  <span class="diff-desc">Large target · Relaxed</span>
+                </div>
+              </button>
+              <button type="button" class="diff-option active" data-value="medium">
+                <span class="diff-dot medium"></span>
+                <div class="diff-option-text">
+                  <span class="diff-title">Medium</span>
+                  <span class="diff-desc">Standard · Balanced</span>
+                </div>
+              </button>
+              <button type="button" class="diff-option" data-value="hard">
+                <span class="diff-dot hard"></span>
+                <div class="diff-option-text">
+                  <span class="diff-title">Hard</span>
+                  <span class="diff-desc">Small target · Fast reflex</span>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Playable Arena -->
+    <main class="main-grid">
+      <div class="arena-wrapper">
+        <div id="game-area" class="game-area">
+          <!-- Start Overlay -->
+          <div id="startOverlay" class="overlay-screen">
+            <h2>Ready to Test Your Reflex?</h2>
+            <p>Hit the targets fast to stack up to <strong>4x Combo</strong>. Missing resets your streak!</p>
+            <button type="button" id="startButton" class="primary-btn">Start Game</button>
+          </div>
+
+          <!-- 3-2-1 Countdown -->
+          <div id="countdown" class="countdown hidden">3</div>
+
+          <!-- Target Circle -->
+          <div id="circle" class="circle hidden" role="button" aria-label="Target Circle"></div>
+
+          <!-- Game Over Overlay -->
+          <div id="gameOverScreen" class="overlay-screen hidden">
+            <span id="newRecordBadge" class="record-badge hidden">🏆 NEW HIGH SCORE!</span>
+            <h2>Time's Up!</h2>
+
+            <div class="results-grid">
+              <div class="result-box">
+                <span class="res-label">Final Score</span>
+                <span class="res-val" id="finalScore">0</span>
+              </div>
+              <div class="result-box">
+                <span class="res-label">Avg Reaction</span>
+                <span class="res-val"><span id="avgTime">0</span> ms</span>
+              </div>
+              <div class="result-box">
+                <span class="res-label">Accuracy</span>
+                <span class="res-val"><span id="accuracy">0</span>%</span>
+              </div>
+              <div class="result-box">
+                <span class="res-label">High Score</span>
+                <span class="res-val" id="finalHighScore">0</span>
+              </div>
+            </div>
+
+            <form id="leaderboardForm" class="lb-form">
+              <input
+                type="text"
+                id="playerName"
+                maxlength="16"
+                placeholder="Enter your name..."
+                autocomplete="off"
+                required
+              />
+              <button type="submit" id="submitScoreBtn" class="primary-btn">Save Score</button>
+            </form>
+
+            <button type="button" id="restartButton" class="secondary-btn">Play Again</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top 5 Leaderboard -->
+      <aside id="leaderboardSection" class="card leaderboard-card">
+        <div class="lb-header">
+          <h3>🏆 Top 5 Leaderboard</h3>
+          <button type="button" id="resetLbBtn" class="reset-btn">Reset</button>
+        </div>
+        <ol id="leaderboardList" class="leaderboard-list"></ol>
+      </aside>
+    </main>
+
+    <!-- Web Footer -->
+    <footer class="web-footer">
+      <span><strong>KINETIX</strong> Web Arcade · <em>Click the Circle!</em></span>
+    </footer>
+  </div>
+
+  <!-- Easter Egg Toast Notification -->
+  <div id="easterToast" class="easter-toast" role="status" aria-live="polite"></div>
+
+</body>
+</html>
